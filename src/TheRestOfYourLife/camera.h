@@ -18,6 +18,7 @@
 #include "material.h"
 
 #include <iostream>
+#include <fstream>
 
 
 class camera {
@@ -38,8 +39,10 @@ class camera {
 
     void render(const hittable& world, const hittable& lights) {
         initialize();
+        std::ofstream file;
+        file.open("output.ppm");
 
-        std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
+        file << "P3\n" << image_width << ' ' << image_height << "\n255\n";
 
         for (int j = 0; j < image_height; ++j) {
             std::clog << "\rScanlines remaining: " << (image_height - j) << ' ' << std::flush;
@@ -51,7 +54,7 @@ class camera {
                         pixel_color += ray_color(r, max_depth, world, lights);
                     }
                 }
-                write_color(std::cout, pixel_color, samples_per_pixel);
+                write_color(file, pixel_color, samples_per_pixel);
             }
         }
 
